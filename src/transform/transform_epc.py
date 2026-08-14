@@ -16,7 +16,7 @@ records = epc_data["data"]
 df = pd.DataFrame(records)
 
 #Step 5: Show first 5 records
-print("\nFirst % records of the epc dataset:")
+print("\nFirst five records of the epc dataset:")
 print(df.head()
       )
 
@@ -42,3 +42,18 @@ df = df.rename(columns={
 })
 
 print("\nEPC columns names:", df.columns)
+
+ 
+# Step 10: Convert registration_date to datetime
+df["registration_date"] = pd.to_datetime(
+    df["registration_date"],
+    errors="coerce"
+)
+
+# Step 11: Check registration_date data type
+print("\nRegistration date datatype:")
+print(df["registration_date"].dtype)
+
+# Step 12: Check for invalid registration dates
+print("\nInvalid registration dates:")
+print(df["registration_date"].isnull().sum())
