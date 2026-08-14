@@ -57,3 +57,13 @@ print(df["registration_date"].dtype)
 # Step 12: Check for invalid registration dates
 print("\nInvalid registration dates:")
 print(df["registration_date"].isnull().sum())
+
+# Step 13: Check energy efficiency ratings
+print("\nEnergy efficiency ratings:")
+print(df["current_energy_efficiency_band"].value_counts())
+
+# Step 14: Check invalid energy ratings
+valid_ratings = ["A", "B", "C"]
+
+print("\nInvalid energy ratings:")
+print((~df["current_energy_efficiency_band"].isin(valid_ratings)).sum())
