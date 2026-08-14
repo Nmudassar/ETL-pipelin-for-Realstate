@@ -67,3 +67,56 @@ valid_ratings = ["A", "B", "C"]
 
 print("\nInvalid energy ratings:")
 print((~df["current_energy_efficiency_band"].isin(valid_ratings)).sum())
+
+# Step 15: Clean postcode
+df["postcode"] = (
+    df["postcode"]
+    .str.strip()
+    .str.upper()
+)
+
+# Step 16: Check missing postcodes
+print("\nMissing EPC postcodes:")
+print(df["postcode"].isnull().sum())
+
+# Step 17: Show cleaned postcodes
+print("\nCleaned EPC postcodes:")
+print(df["postcode"].head())
+
+# Step 18: Create full EPC address
+address_columns = [
+    "address_line_1",
+    "address_line_2",
+    "address_line_3",
+    "address_line_4",
+    "post_town",
+    "postcode",
+]
+
+df["full_address"] = df[address_columns].apply(
+    lambda row: ", ".join(row.dropna().astype(str)),
+    axis=1
+)
+
+# Step 19: Show sample full addresses
+print("\nSample EPC full addresses:")
+print(df["full_address"].head())
+  
+# Step 20: Check duplicate certificate numbers
+print("\nDuplicate certificate numbers:")
+print(df["certificate_number"].duplicated().sum())
+
+# Step 22: Define Silver EPC output path
+silver_file_path = "data/silver/epc/epc_energy_efficient_cleaned.parquet"
+
+
+# Step 23: Save cleaned EPC data as Parquet
+df.to_parquet(
+    silver_file_path,
+    index=False
+)
+
+
+# Step 24: Confirm Silver file was created
+print("\nEPC Silver dataset created successfully.")
+print("Saved to:", silver_file_path)
