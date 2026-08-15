@@ -39,7 +39,8 @@ matching_postcodes = epc_df[
 print("\nEPC records with matching Land Registry postcodes:")
 print(matching_postcodes.shape[0])
 
-# Step 11: Create a normalised address key for Land Registry
+
+# Step 7: Create normalised address key for Land Registry
 land_df["address_key"] = (
     land_df["full_address"]
     .str.upper()
@@ -48,7 +49,7 @@ land_df["address_key"] = (
 )
 
 
-# Step 12: Create a normalised address key for EPC
+# Step 8: Create normalised address key for EPC
 epc_df["address_key"] = (
     epc_df["full_address"]
     .str.upper()
@@ -56,7 +57,8 @@ epc_df["address_key"] = (
     .str.replace(" ", "", regex=False)
 )
 
-# Step 13: Join using postcode and normalised address
+
+# Step 9: Join using postcode and normalised address
 property_join_df = land_df.merge(
     epc_df,
     on=["postcode", "address_key"],
@@ -64,14 +66,19 @@ property_join_df = land_df.merge(
     suffixes=("_land", "_epc")
 )
 
-# Step 14: Count successful property matches
+
+# Step 10: Keep successful property matches
 matched_properties = property_join_df[
     property_join_df["certificate_number"].notnull()
 ]
 
+
+# Step 11: Count successful matches
 print("\nProperty-level matches:")
 print(len(matched_properties))
 
+
+# Step 12: Show matched property details
 print("\nMatched property details:")
 
 print(
