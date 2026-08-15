@@ -94,19 +94,57 @@ print(
     ].head(10)
 )
 
-# Step 13: Create Gold folder path
-gold_file_path = (
-    "data/gold/property_energy/"
-    "property_energy_gold.parquet"
+# Step 13: Create Gold analytics dataset
+gold_df = property_join_df[
+    [
+        "transaction_id",
+        "price",
+        "transfer_date",
+        "postcode",
+        "town_city",
+        "district",
+        "county",
+        "property_type",
+        "old_new",
+        "tenure",
+        "full_address_land",
+        "certificate_number",
+        "uprn",
+        "current_energy_efficiency_band",
+        "registration_date",
+    ]
+].copy()
+
+
+# Step 14: Rename columns for business reporting
+gold_df = gold_df.rename(
+    columns={
+        "full_address_land": "full_address",
+        "current_energy_efficiency_band": "energy_rating",
+        "registration_date": "epc_registration_date",
+    }
 )
 
 
-# Step 14: Save matched properties to Gold
-matched_properties.to_parquet(
+# Step 15: Create useful date columns for Power BI
+gold_df["sale_year"] = gold_df["transfer_date"].dt.year
+gold_df["sale_month"] = gold_df["transfer_date"].dt.month
+
+
+# Step 16: Define Gold output path
+gold_file_path = (
+    "data/gold/property_analytics/"
+    "property_analytics_gold.parquet"
+)
+
+
+# Step 17: Save Gold analytics dataset
+gold_df.to_parquet(
     gold_file_path,
     index=False
 )
 
 
-print("\nGold dataset created successfully.")
+print("\nGold analytics dataset created successfully.")
+print("Gold dataset shape:", gold_df.shape)
 print("Saved to:", gold_file_path)

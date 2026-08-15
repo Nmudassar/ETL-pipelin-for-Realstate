@@ -1,35 +1,51 @@
+import os
+
 from azure.identity import DefaultAzureCredential
 from azure.storage.filedatalake import DataLakeServiceClient
+from dotenv import load_dotenv
 
 
-# Step 1: Storage account name
-storage_account_name = "stpropertyetlnadia01"
+# Step 1: Load environment variables
+load_dotenv()
 
 
-# Step 2: Azure Data Lake account URL
+# Step 2: Read Azure settings
+storage_account_name = os.getenv("AZURE_STORAGE_ACCOUNT")
+file_system_name = os.getenv("AZURE_FILE_SYSTEM")
+
+
+# Step 3: Check settings exist
+if not storage_account_name:
+    raise ValueError("AZURE_STORAGE_ACCOUNT was not found in .env")
+
+if not file_system_name:
+    raise ValueError("AZURE_FILE_SYSTEM was not found in .env")
+
+
+# Step 4: Create Azure Data Lake URL
 account_url = (
     f"https://{storage_account_name}.dfs.core.windows.net"
 )
 
 
-# Step 3: Authenticate using your Azure login
+# Step 5: Authenticate
 credential = DefaultAzureCredential()
 
 
-# Step 4: Connect to Azure Data Lake
+# Step 6: Connect to Azure Data Lake
 service_client = DataLakeServiceClient(
     account_url=account_url,
     credential=credential,
 )
 
 
-# Step 5: Connect to property-data container
+# Step 7: Connect to container
 file_system_client = service_client.get_file_system_client(
-    file_system="property-data"
+    file_system=file_system_name
 )
 
 
-# Step 6: Reusable upload function
+# Step 8: Create reusable upload function
 def upload_file(local_file_path, azure_file_path):
 
     file_client = file_system_client.get_file_client(
@@ -45,38 +61,38 @@ def upload_file(local_file_path, azure_file_path):
     print("Uploaded:", azure_file_path)
 
 
-# Step 7: Upload Bronze Land Registry
+# Step 9: Upload Bronze Land Registry
 upload_file(
     "data/bronze/land_registry/pp-monthly-update-new-version.csv",
     "bronze/land_registry/pp-monthly-update-new-version.csv",
 )
 
 
-# Step 8: Upload Bronze EPC
+# Step 10: Upload Bronze EPC
 upload_file(
     "data/bronze/epc/epc_energy_efficient_raw.json",
     "bronze/epc/epc_energy_efficient_raw.json",
 )
 
 
-# Step 9: Upload Silver Land Registry
+# Step 11: Upload Silver Land Registry
 upload_file(
     "data/silver/land_registry/land_registry_cleaned.parquet",
     "silver/land_registry/land_registry_cleaned.parquet",
 )
 
 
-# Step 10: Upload Silver EPC
+# Step 12: Upload Silver EPC
 upload_file(
     "data/silver/epc/epc_energy_efficient_cleaned.parquet",
     "silver/epc/epc_energy_efficient_cleaned.parquet",
 )
 
 
-# Step 11: Upload Gold dataset
+# Step 13: # Upload Gold analytics dataset
 upload_file(
-    "data/gold/property_energy/property_energy_gold.parquet",
-    "gold/property_energy_gold.parquet",
+    "data/gold/property_analytics/property_analytics_gold.parquet",
+    "gold/property_analytics/property_analytics_gold.parquet",
 )
 
 
