@@ -24,55 +24,80 @@ headers = {
     "Accept" : "application/json",
 }
 
-# step 6 : Search the filter
-params = [
-    ("postcode", "SS13 2LU"),
-    ("efficiency_rating[]", "A"),
-    ("efficiency_rating[]", "B"),
-    ("efficiency_rating[]", "C"),
-    ("current_page", 1),
-    ("page_size", 10),
-]
-
-#step 7 : send GET request to the EPC API
-try:
-    response = requests.get(
-        url,
-        headers=headers,
-        params=params,
-        timeout=60,
-    )
-
-    # Show the final URL sent to the API
-    print("\nRequest URL:")
-    print(response.url)
-
-    # Step 8: Print status code
-    print("\nStatus code:")
-    print(response.status_code)
-
-    # Step 9: Stop if API returned an error
-    response.raise_for_status()
-
-except requests.exceptions.ReadTimeout:
-    print("\nEPC API request timed out.")
-    print("Please try again later.")
-    exit()
-
-# Step 10: Convert JSON response into Python data
-data = response.json()
+# Step 6: Read Land Registry Silver data
+land_df = pd.read_parquet(
+    "data/silver/land_registry/land_registry_cleaned.parquet"
+)
 
 
-# Step 11: Show the response
-print("\nEPC API response:")
-print(data)
+# Step 7: Get first 10 unique postcodes
+postcodes = (
+    land_df["postcode"]
+    .dropna()
+    .drop_duplicates()
+    .head(10)
+    .tolist()
+)
 
-# Step 12: Extract certificate records from the API response
-records = data["data"]
+print("\nPostcodes to search:")
+print(postcodes)
 
 
-# Step 13: Convert the records into a Pandas DataFrame
-epc_df = pd.DataFrame(records)
+# Step 8: Store all EPC records
+all_records = []
+
+
+# Step 9: Loop through each postcode
+for postcode in postcodes:
+
+    params = [
+        ("postcode", postcode),
+        ("efficiency_rating[]", "A"),
+        ("efficiency_rating[]", "B"),
+        ("efficiency_rating[]", "C"),
+        ("current_page", 1),
+        ("page_size", 10),
+    ]
+
+    try:
+        response = requests.get(
+            url,
+            headers=headers,
+            params=params,
+            timeout=60,
+        )
+
+        print("\nSearching postcode:", postcode)
+        print("Status code:", response.status_code)
+
+        # No EPC found for this postcode
+        if response.status_code == 404:
+            print("No EPC records found.")
+            continue
+
+        response.raise_for_status()
+
+    except requests.exceptions.ReadTimeout:
+        print("Request timed out for:", postcode)
+        continue
+
+
+# Step 10: Convert API response to Python data
+    data = response.json()
+
+
+# Step 11: Extract EPC certificate records
+    records = data["data"]
+
+
+# Step 12: Add these records to all_records
+    all_records.extend(records)
+
+print("EPC records found:", len(records))
+
+
+# Step 13: Convert all EPC records into a DataFrame
+epc_df = pd.DataFrame(all_records)
 
 # Step 14: Show the first 5 EPC records
 print("\nFirst 5 EPC records:")
@@ -96,10 +121,13 @@ print(epc_df.dtypes)
 # Step 18: Define the Bronze EPC output file
 bronze_epc_file = "data/bronze/epc/epc_energy_efficient_raw.json"
 
-
-# Step 19: Save the raw EPC API response as JSON
+# Step 19: Save all EPC records to Bronze JSON
 with open(bronze_epc_file, "w") as file:
-    json.dump(data, file, indent=4)
+    json.dump(
+        {"data": all_records},
+        file,
+        indent=4
+    )
 
 
 # Step 20: Confirm that the Bronze file was created
