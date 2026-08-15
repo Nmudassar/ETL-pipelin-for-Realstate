@@ -50,58 +50,76 @@ all_records = []
 # Step 9: Loop through each postcode
 for postcode in postcodes:
 
-    params = [
-        ("postcode", postcode),
-        ("efficiency_rating[]", "A"),
-        ("efficiency_rating[]", "B"),
-        ("efficiency_rating[]", "C"),
-        ("current_page", 1),
-        ("page_size", 10),
-    ]
+    current_page = 1
 
-    try:
-        response = requests.get(
-            url,
-            headers=headers,
-            params=params,
-            timeout=60,
-        )
+    while True:
 
-        print("\nSearching postcode:", postcode)
-        print("Status code:", response.status_code)
+        params = [
+            ("postcode", postcode),
+            ("efficiency_rating[]", "A"),
+            ("efficiency_rating[]", "B"),
+            ("efficiency_rating[]", "C"),
+            ("current_page", current_page),
+            ("page_size", 10),
+        ]
 
-        # No EPC found for this postcode
-        if response.status_code == 404:
-            print("No EPC records found.")
-            continue
+        try:
+            response = requests.get(
+                url,
+                headers=headers,
+                params=params,
+                timeout=60,
+            )
 
-        response.raise_for_status()
+            print(
+                "\nSearching postcode:",
+                postcode,
+                "- page:",
+                current_page,
+            )
 
-    except requests.exceptions.ReadTimeout:
-        print("Request timed out for:", postcode)
-        continue
+            print("Status code:", response.status_code)
+
+            # No EPC records found for this postcode
+            if response.status_code == 404:
+                print("No EPC records found.")
+                break
+
+            response.raise_for_status()
+
+            # Step 10: Convert API response to Python data
+            data = response.json()
+
+            # Step 11: Extract EPC certificate records
+            records = data["data"]
+
+            # Step 12: Add records from this page
+            all_records.extend(records)
+
+            print("EPC records found:", len(records))
+
+            # Step 13: Check if another page exists
+            next_page = data["pagination"]["nextPage"]
+
+            # Stop pagination if there is no next page
+            if next_page is None:
+                break
+
+            # Move to the next page
+            current_page = next_page
+
+        except requests.exceptions.ReadTimeout:
+            print("Request timed out for:", postcode)
+            break
 
 
-# Step 10: Convert API response to Python data
-    data = response.json()
+# Step 14: Show total EPC records collected
+print("\nTotal EPC records extracted:")
+print(len(all_records))
 
 
-# Step 11: Extract EPC certificate records
-    records = data["data"]
-
-
-# Step 12: Add these records to all_records
-    all_records.extend(records)
-
-print("EPC records found:", len(records))
-
-
-# Step 13: Convert all EPC records into a DataFrame
+# Step 15: Convert all EPC records into a DataFrame
 epc_df = pd.DataFrame(all_records)
-
-# Step 14: Show the first 5 EPC records
-print("\nFirst 5 EPC records:")
-print(epc_df.head())
 
 
 # Step 15: Show the shape of the EPC dataset

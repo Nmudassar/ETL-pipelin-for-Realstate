@@ -106,6 +106,50 @@ print(df["full_address"].head())
 print("\nDuplicate certificate numbers:")
 print(df["certificate_number"].duplicated().sum())
 
+# Remove duplicate EPC certificate numbers
+df = df.drop_duplicates(
+    subset=["certificate_number"],
+    keep="first"
+)
+
+print("\nEPC records after removing duplicate certificates:")
+print(df.shape)
+
+
+# Keep latest EPC certificate for each property
+
+# Records with a UPRN
+with_uprn = df[df["uprn"].notna()].copy()
+
+# Records without a UPRN
+without_uprn = df[df["uprn"].isna()].copy()
+
+
+# Sort newest certificates first
+with_uprn = with_uprn.sort_values(
+    by="registration_date",
+    ascending=False
+)
+
+
+# Keep only the latest certificate for each UPRN
+with_uprn = with_uprn.drop_duplicates(
+    subset=["uprn"],
+    keep="first"
+)
+
+
+# Add records without UPRN back
+df = pd.concat(
+    [with_uprn, without_uprn],
+    ignore_index=True
+)
+
+
+print("\nEPC records after keeping latest certificate per UPRN:")
+print(df.shape)
+
+
 # Step 22: Define Silver EPC output path
 silver_file_path = "data/silver/epc/epc_energy_efficient_cleaned.parquet"
 

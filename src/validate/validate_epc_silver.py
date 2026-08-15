@@ -48,9 +48,16 @@ print("\nDuplicate certificate numbers:")
 print(df["certificate_number"].duplicated().sum())
 
 
-# Step 11: Check duplicate UPRNs
+## Step 11: Check duplicate UPRNs and ignore missing values
+duplicate_uprns = (
+    df["uprn"]
+    .dropna()
+    .duplicated()
+    .sum()
+)
+
 print("\nDuplicate UPRNs:")
-print(df["uprn"].duplicated().sum())
+print(duplicate_uprns)
 
 
 print("\nEPC Silver validation completed.")
