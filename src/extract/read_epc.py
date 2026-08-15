@@ -26,6 +26,7 @@ headers = {
 
 # step 6 : Search the filter
 params = [
+    ("postcode", "SS13 2LU"),
     ("efficiency_rating[]", "A"),
     ("efficiency_rating[]", "B"),
     ("efficiency_rating[]", "C"),
