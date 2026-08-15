@@ -2,3 +2,5 @@ pandas
 pyarrow
 requests
 python-dotenv
+azure-storage-file-datalake
+azure-identity
