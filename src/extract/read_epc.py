@@ -29,13 +29,15 @@ land_df = pd.read_parquet(
     "data/silver/land_registry/land_registry_cleaned.parquet"
 )
 
+# Number of Land Registry postcodes to process
+POSTCODE_LIMIT = 10
 
 # Step 7: Get first 10 unique postcodes
 postcodes = (
     land_df["postcode"]
     .dropna()
     .drop_duplicates()
-    .head(10)
+    .head(POSTCODE_LIMIT)
     .tolist()
 )
 
@@ -122,24 +124,24 @@ print(len(all_records))
 epc_df = pd.DataFrame(all_records)
 
 
-# Step 15: Show the shape of the EPC dataset
+# Step 16: Show the shape of the EPC dataset
 print("\nEPC dataset shape:")
 print(epc_df.shape)
 
 
-# Step 16: Show EPC column names
+# Step 17: Show EPC column names
 print("\nEPC column names:")
 print(epc_df.columns)
 
 
-# Step 17: Show EPC data types
+# Step 18: Show EPC data types
 print("\nEPC data types:")
 print(epc_df.dtypes)
 
-# Step 18: Define the Bronze EPC output file
+# Step 19: Define the Bronze EPC output file
 bronze_epc_file = "data/bronze/epc/epc_energy_efficient_raw.json"
 
-# Step 19: Save all EPC records to Bronze JSON
+# Step 20: Save all EPC records to Bronze JSON
 with open(bronze_epc_file, "w") as file:
     json.dump(
         {"data": all_records},
@@ -148,6 +150,6 @@ with open(bronze_epc_file, "w") as file:
     )
 
 
-# Step 20: Confirm that the Bronze file was created
+# Step 21: Confirm that the Bronze file was created
 print("\nEPC Bronze file created successfully.")
 print("Saved to:", bronze_epc_file)
