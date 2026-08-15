@@ -93,3 +93,20 @@ print(
         ]
     ].head(10)
 )
+
+# Step 13: Create Gold folder path
+gold_file_path = (
+    "data/gold/property_energy/"
+    "property_energy_gold.parquet"
+)
+
+
+# Step 14: Save matched properties to Gold
+matched_properties.to_parquet(
+    gold_file_path,
+    index=False
+)
+
+
+print("\nGold dataset created successfully.")
+print("Saved to:", gold_file_path)
