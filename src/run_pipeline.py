@@ -10,7 +10,7 @@ logging.basicConfig(
 )
 
 
-# Step 2: Resueable  Function to run each pipeline stage
+# Step 2: Create reusable function
 def run_step(step_name, script_path):
 
     print(f"\nRunning: {step_name}")
@@ -18,7 +18,7 @@ def run_step(step_name, script_path):
 
     try:
         subprocess.run(
-            ["python3", script_path],
+            ["python", script_path],
             check=True,
         )
 
@@ -31,7 +31,7 @@ def run_step(step_name, script_path):
         raise
 
 
-# Step 3: Run EPC extraction
+# Step 3: Extract EPC data
 run_step(
     "Extract EPC data",
     "src/extract/read_epc.py",
@@ -54,15 +54,22 @@ run_step(
 
 # Step 6: Join Land Registry and EPC
 run_step(
-    "Create Gold dataset",
+    "Create Gold analytics dataset",
     "src/integrate/join_land_registry_epc.py",
 )
 
 
-# Step 7: Upload files to Azure
+# Step 7: Upload datasets to Azure Data Lake
 run_step(
     "Upload data to Azure Data Lake",
     "src/load/upload_to_azure.py",
+)
+
+
+# Step 8: Load Gold data from Azure into PostgreSQL
+run_step(
+    "Load Gold data into PostgreSQL",
+    "src/load/load_to_postgres.py",
 )
 
 

@@ -31,3 +31,16 @@
 2026-08-15 21:36:30,975 - INFO - Starting: Upload data to Azure Data Lake
 2026-08-15 21:36:40,361 - INFO - Completed: Upload data to Azure Data Lake
 2026-08-15 21:36:40,361 - INFO - ETL pipeline completed successfully.
+2026-08-16 23:06:00,443 - INFO - Starting: Extract EPC data
+2026-08-16 23:06:06,765 - INFO - Completed: Extract EPC data
+2026-08-16 23:06:06,765 - INFO - Starting: Transform EPC data
+2026-08-16 23:06:07,191 - INFO - Completed: Transform EPC data
+2026-08-16 23:06:07,191 - INFO - Starting: Validate EPC Silver data
+2026-08-16 23:06:07,619 - INFO - Completed: Validate EPC Silver data
+2026-08-16 23:06:07,620 - INFO - Starting: Create Gold analytics dataset
+2026-08-16 23:06:08,471 - INFO - Completed: Create Gold analytics dataset
+2026-08-16 23:06:08,471 - INFO - Starting: Upload data to Azure Data Lake
+2026-08-16 23:06:17,336 - INFO - Completed: Upload data to Azure Data Lake
+2026-08-16 23:06:17,336 - INFO - Starting: Load Gold data into PostgreSQL
+2026-08-16 23:06:35,418 - INFO - Completed: Load Gold data into PostgreSQL
+2026-08-16 23:06:35,418 - INFO - ETL pipeline completed successfully.
