@@ -1,0 +1,33 @@
+2026-08-15 21:23:11,821 - INFO - Starting: Extract EPC data
+2026-08-15 21:23:18,665 - INFO - Completed: Extract EPC data
+2026-08-15 21:23:18,665 - INFO - Starting: Transform EPC data
+2026-08-15 21:23:19,191 - INFO - Completed: Transform EPC data
+2026-08-15 21:23:19,191 - INFO - Starting: Validate EPC Silver data
+2026-08-15 21:23:19,680 - INFO - Completed: Validate EPC Silver data
+2026-08-15 21:23:19,680 - INFO - Starting: Create Gold dataset
+2026-08-15 21:23:20,615 - INFO - Completed: Create Gold dataset
+2026-08-15 21:23:20,615 - INFO - Starting: Upload data to Azure Data Lake
+2026-08-15 21:23:29,239 - INFO - Completed: Upload data to Azure Data Lake
+2026-08-15 21:23:29,240 - INFO - ETL pipeline completed successfully.
+2026-08-15 21:28:10,877 - INFO - Starting: Extract EPC data
+2026-08-15 21:28:17,808 - INFO - Completed: Extract EPC data
+2026-08-15 21:28:17,808 - INFO - Starting: Transform EPC data
+2026-08-15 21:28:18,297 - INFO - Completed: Transform EPC data
+2026-08-15 21:28:18,297 - INFO - Starting: Validate EPC Silver data
+2026-08-15 21:28:18,781 - INFO - Completed: Validate EPC Silver data
+2026-08-15 21:28:18,781 - INFO - Starting: Create Gold dataset
+2026-08-15 21:28:19,654 - INFO - Completed: Create Gold dataset
+2026-08-15 21:28:19,654 - INFO - Starting: Upload data to Azure Data Lake
+2026-08-15 21:28:28,199 - INFO - Completed: Upload data to Azure Data Lake
+2026-08-15 21:28:28,199 - INFO - ETL pipeline completed successfully.
+2026-08-15 21:36:22,240 - INFO - Starting: Extract EPC data
+2026-08-15 21:36:28,770 - INFO - Completed: Extract EPC data
+2026-08-15 21:36:28,771 - INFO - Starting: Transform EPC data
+2026-08-15 21:36:29,356 - INFO - Completed: Transform EPC data
+2026-08-15 21:36:29,356 - INFO - Starting: Validate EPC Silver data
+2026-08-15 21:36:29,975 - INFO - Completed: Validate EPC Silver data
+2026-08-15 21:36:29,975 - INFO - Starting: Create Gold dataset
+2026-08-15 21:36:30,975 - INFO - Completed: Create Gold dataset
+2026-08-15 21:36:30,975 - INFO - Starting: Upload data to Azure Data Lake
+2026-08-15 21:36:40,361 - INFO - Completed: Upload data to Azure Data Lake
+2026-08-15 21:36:40,361 - INFO - ETL pipeline completed successfully.
