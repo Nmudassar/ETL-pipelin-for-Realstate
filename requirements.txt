@@ -4,3 +4,6 @@ requests
 python-dotenv
 azure-storage-file-datalake
 azure-identity
+
+psycopg2-binary
+SQLAlchemy
