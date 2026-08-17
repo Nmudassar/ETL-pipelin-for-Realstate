@@ -5,7 +5,8 @@
 The **Real Estate ELT Data Pipeline** is an end-to-end data engineering project that extracts property transaction and energy performance data, transforms and validates the datasets, integrates them into an analytics-ready dataset, stores the data using a Bronze, Silver and Gold architecture in Azure Data Lake Storage, and loads the final Gold dataset into Azure Database for PostgreSQL.
 
 The project combines property transaction data from the **UK Land Registry** with **Energy Performance Certificate (EPC)** data to create a property analytics dataset that can later be used for SQL analysis and Power BI dashboards.
-
+git add .
+git commit -m "docs: add architecture diagram and troubleshooting guide"
 ## Project Architecture
 
 ![UK Property ETL Pipeline Architecture](assets/images/property-etl-architecture.png)
